@@ -16,7 +16,6 @@ namespace Курсовая_работа__ООАиП
     
     public partial class Form1 : Form
     {
-        private User _user=new User();
         private SQL_request _sqlRequest = new SQL_request();
 
         private bool _isNullValue=false;
@@ -99,10 +98,9 @@ namespace Курсовая_работа__ООАиП
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (!CheckForNullValues(textBox3.Text, textBox4.Text) && PasswordCheck(textBox4.Text))
+            if (!CheckForNullValues(textBox3.Text, textBox4.Text) && PasswordCheck(textBox4.Text) && !CheckIfUserExists(textBox3.Text, textBox4.Text, 1))
             {
-                
-                SQLREquesForLoggingIn(textBox3.Text, textBox4.Text, 1);
+                SQLRequestForRegistration(textBox3.Text, textBox4.Text);
             }
             else
             {
@@ -125,18 +123,73 @@ namespace Курсовая_работа__ООАиП
            
         }
 
-        void RegisterInUserDatabase(string login, string password, int indexOfRequest)
+        private bool CheckIfUserExists(string login, string password, int indexOfRequest)
         {
-            string tempLoginForCheck = "";
-            int id = 0;
-
-            SqlDataReader loginReader;
-            SqlDataReader idReader;
+            string tempLoginForCheck = "";            
+            SqlDataReader loginReader;           
 
             using(SqlConnection conn = new SqlConnection(_sqlRequest.path))
             {
                 conn.Open();
+                SqlCommand command = new SqlCommand(_sqlRequest.listOfRequest[indexOfRequest], conn);
+                SqlParameter loginParameter = new SqlParameter("@userName", login);
+                command.Parameters.Add(loginParameter);
+                loginReader=command.ExecuteReader();
+
+                while(loginReader.Read())
+                    tempLoginForCheck=loginReader.GetString(0);
+                if (tempLoginForCheck != "")
+                {
+                    MessageBox.Show("Данный логин занят!");
+                    conn.Close();
+                    return true;
+                }
+                else
+                {
+                    return false; 
+                    conn.Close();
+                }
+                    
+                
             }
+            
+        }
+
+        private void SQLRequestForRegistration(string login, string password)
+        {
+            int id = GetLastIDOFUser();
+            
+            
+            using (SqlConnection connection = new SqlConnection(_sqlRequest.path))
+            {
+                connection.Open();
+                SqlCommand command= new SqlCommand($"INSERT INTO [EBI-212].[dbo].[users](id, login, password, role)VALUES({id}, '{login}', '{password}', 'guest') ", connection);
+               
+
+                
+                if (command.ExecuteNonQuery().ToString() == Convert.ToString(1))
+                    MessageBox.Show("Пользователь успешно зарегестрирован!");
+            
+
+            }
+        }
+
+        private int GetLastIDOFUser()
+        {
+            SqlDataReader idReader;
+            int id=0;
+            using(SqlConnection connection = new SqlConnection(_sqlRequest.path))
+            {
+                connection.Open();
+                SqlCommand command1 = new SqlCommand(_sqlRequest.listOfRequest[2], connection);
+                SqlParameter idParameter = new SqlParameter("@id", id);
+                command1.Parameters.Add(idParameter);
+                idReader = command1.ExecuteReader();
+                while(idReader.Read())
+                    id=idReader.GetInt32(0);
+                id++;
+            }
+            return id;
         }
     }
 }

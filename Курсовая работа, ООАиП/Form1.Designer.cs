@@ -62,7 +62,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 2;
-            this.button1.Text = "button1";
+            this.button1.Text = "Войти";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -86,7 +86,7 @@
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(360, 234);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "tabPage1";
+            this.tabPage1.Text = "Авторизация";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // tabPage2
@@ -99,16 +99,16 @@
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(360, 234);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "tabPage2";
+            this.tabPage2.Text = "Регистрация";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(134, 132);
+            this.button2.Location = new System.Drawing.Point(105, 135);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.Size = new System.Drawing.Size(162, 23);
             this.button2.TabIndex = 3;
-            this.button2.Text = "button2";
+            this.button2.Text = "Зарегистрироватья";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -116,14 +116,14 @@
             // 
             this.textBox4.Location = new System.Drawing.Point(123, 91);
             this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(100, 20);
+            this.textBox4.Size = new System.Drawing.Size(132, 20);
             this.textBox4.TabIndex = 1;
             // 
             // textBox3
             // 
             this.textBox3.Location = new System.Drawing.Point(123, 36);
             this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(100, 20);
+            this.textBox3.Size = new System.Drawing.Size(132, 20);
             this.textBox3.TabIndex = 0;
             // 
             // Form1
@@ -133,7 +133,7 @@
             this.ClientSize = new System.Drawing.Size(381, 283);
             this.Controls.Add(this.tabControl1);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Форма авторизации";
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
