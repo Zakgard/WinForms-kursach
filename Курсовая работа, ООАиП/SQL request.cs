@@ -12,8 +12,8 @@ namespace Курсовая_работа__ООАиП
     
     public class SQL_request
     {
-        public string path = @"Server=localhost\SQLEXPRESS;Database=EBI-212;Trusted_Connection=True;";
-        public string[] listOfRequest= new string[]
+        public static string path = @"Server=localhost\SQLEXPRESS;Database=EBI-212;Trusted_Connection=True;";
+        public static string[] listOfRequest= new string[]
         {
             $"SELECT password, role FROM Users WHERE login = @login",
             $"SELECT login FROM [EBI-212].[dbo].[users] WHERE @userName=login",
@@ -24,10 +24,5 @@ namespace Курсовая_работа__ООАиП
         public SqlCommand sqlCommand=new SqlCommand();       
     };
 
-    public static class User
-    {
-        public static int id;
-        public static string userName;
-        public static string password;
-    }
+   
 }

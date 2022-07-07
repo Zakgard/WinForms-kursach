@@ -67,10 +67,10 @@ namespace Курсовая_работа__ООАиП
 
             SqlDataReader reader;
 
-            using (SqlConnection conn = new SqlConnection(_sqlRequest.path))
+            using (SqlConnection conn = new SqlConnection(SQL_request.path))
             {
                 conn.Open();
-                SqlCommand command= new SqlCommand(_sqlRequest.listOfRequest[indexOfRequest], conn);
+                SqlCommand command= new SqlCommand(SQL_request.listOfRequest[indexOfRequest], conn);
                 SqlParameter loginParameter= new SqlParameter("@login", login);
                 command.Parameters.Add(loginParameter);
                 reader = command.ExecuteReader();
@@ -128,10 +128,10 @@ namespace Курсовая_работа__ООАиП
             string tempLoginForCheck = "";            
             SqlDataReader loginReader;           
 
-            using(SqlConnection conn = new SqlConnection(_sqlRequest.path))
+            using(SqlConnection conn = new SqlConnection(SQL_request.path))
             {
                 conn.Open();
-                SqlCommand command = new SqlCommand(_sqlRequest.listOfRequest[indexOfRequest], conn);
+                SqlCommand command = new SqlCommand(SQL_request.listOfRequest[indexOfRequest], conn);
                 SqlParameter loginParameter = new SqlParameter("@userName", login);
                 command.Parameters.Add(loginParameter);
                 loginReader=command.ExecuteReader();
@@ -160,7 +160,7 @@ namespace Курсовая_работа__ООАиП
             int id = GetLastIDOFUser();
             
             
-            using (SqlConnection connection = new SqlConnection(_sqlRequest.path))
+            using (SqlConnection connection = new SqlConnection(SQL_request.path))
             {
                 connection.Open();
                 SqlCommand command= new SqlCommand($"INSERT INTO [EBI-212].[dbo].[users](id, login, password, role)VALUES({id}, '{login}', '{password}', 'guest') ", connection);
@@ -178,10 +178,10 @@ namespace Курсовая_работа__ООАиП
         {
             SqlDataReader idReader;
             int id=0;
-            using(SqlConnection connection = new SqlConnection(_sqlRequest.path))
+            using(SqlConnection connection = new SqlConnection(SQL_request.path))
             {
                 connection.Open();
-                SqlCommand command1 = new SqlCommand(_sqlRequest.listOfRequest[2], connection);
+                SqlCommand command1 = new SqlCommand(SQL_request.listOfRequest[2], connection);
                 SqlParameter idParameter = new SqlParameter("@id", id);
                 command1.Parameters.Add(idParameter);
                 idReader = command1.ExecuteReader();
