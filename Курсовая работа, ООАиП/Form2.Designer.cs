@@ -102,7 +102,7 @@
             // 
             this.textBox8.Location = new System.Drawing.Point(87, 399);
             this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(100, 20);
+            this.textBox8.Size = new System.Drawing.Size(250, 20);
             this.textBox8.TabIndex = 8;
             this.toolTip1.SetToolTip(this.textBox8, "Если ничего не написать, присвоется пустое значение");
             // 
@@ -138,6 +138,7 @@
             this.button1.Text = "Отобразить список пользователй";
             this.toolTip1.SetToolTip(this.button1, "Доступно только пользователям с ролью \"админ\"");
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // button2
             // 
@@ -148,6 +149,7 @@
             this.button2.Text = "Результат обработки";
             this.toolTip1.SetToolTip(this.button2, "Не доступно пользователям с ролью \"гость\"");
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button3
             // 
@@ -161,7 +163,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(302, 435);
+            this.button4.Location = new System.Drawing.Point(348, 437);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(168, 31);
             this.button4.TabIndex = 14;

@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
+using System.Data.SqlClient;
 
 namespace Курсовая_работа__ООАиП
 {
@@ -30,24 +26,43 @@ namespace Курсовая_работа__ООАиП
         {
             comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBox2.DropDownStyle = ComboBoxStyle.DropDownList;
-            dateTimePicker1.AllowDrop = false;
+            
 
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            CheckForNulls();
+            if (!CheckForNulls() && IsStudentNotExists(Convert.ToInt32(textBox6.Text)))
+                AddNewStudent(textBox1.Text, textBox2.Text, textBox3.Text, dateTimePicker1.Value.Day, dateTimePicker1.Value.Month,dateTimePicker1.Value.Year , comboBox1.Text, comboBox2.Text, Convert.ToInt32(textBox6.Text), Convert.ToInt32(textBox7.Text), textBox8.Text);
+          
+
+        }
+
+        public static void AddNewStudent(string firstName, string secondName, string thirdName, int dayOfBirth, int monthOfBirth, int yearOfBirth, string sex, string payMethod, int studNUm, int debtsAmount, string other)
+        {
+            string expression = $"INSERT INTO [EBI-212].[dbo].[student](surName, name, secondName, birthD, birthM, birthY, gender, studNum, payMet, debts, other) " +
+                $"VALUES (N'{firstName}', N'{secondName}', N'{thirdName}', N'{dayOfBirth}', N'{monthOfBirth}', N'{yearOfBirth}', N'{sex}', N'{studNUm}',N'{payMethod}', N'{debtsAmount}', N'{other}');";
+            SqlConnection connection = new SqlConnection(SQL_request.path);
+            connection.Open();
+
+            SqlCommand command = new SqlCommand(expression, connection);
+
+            if (command.ExecuteNonQuery().ToString() == Convert.ToString(1))
+                MessageBox.Show("Данные о студенте внесены!");
+
+
+
         }
 
         private bool CheckForNulls()
-        {
+        {            
             StringBuilder sb= new StringBuilder("", 50);
             bool isMistake=false;
             if (textBox1.Text == "")
             {
                 isMistake = true;
                 sb.AppendLine("Вы не ввели фамилию студента!");
-            }else if (Convert.ToString(textBox1.Text.GetType()) == "System.String")
+            }else if (!Regex.IsMatch(textBox1.Text, @"^[\p{L}]+$"))
             {
                 sb.AppendLine("В поле фамилия допускаются только буквы!");
             }
@@ -57,7 +72,7 @@ namespace Курсовая_работа__ООАиП
                 isMistake = true;
                 sb.AppendLine("Вы не ввели имя студента!");
             }
-            else if (Convert.ToString(textBox2.Text.GetType()) == "System.String")
+            else if (!Regex.IsMatch(textBox2.Text, @"^[\p{L}]+$"))
             {
                 sb.AppendLine("В поле имя допускаются только буквы!");
             }
@@ -67,7 +82,7 @@ namespace Курсовая_работа__ООАиП
                 isMistake = true;
                 sb.AppendLine("Вы не ввели отчество студента!");
             }
-            else if (Convert.ToString(textBox1.Text.GetType()) == "System.String")
+            else if (!Regex.IsMatch(textBox3.Text, @"^[\p{L}]+$"))
             {
                 sb.AppendLine("В поле отчество допускаются только буквы!");
             }
@@ -91,17 +106,30 @@ namespace Курсовая_работа__ООАиП
                 isMistake = true;
                 sb.AppendLine("Вы не выбрали основу обучения!");
             }
-           
 
+            
             if (textBox6.Text == "")
             {
                 isMistake = true;
                 sb.AppendLine("Вы не ввели номер студенческого!");
             }
-            else if (Convert.ToString(textBox1.Text.GetType()) == "System.Int")
+            else if (!Regex.IsMatch(textBox6.Text, @"^[\p{N}]+$"))
             {
-                sb.AppendLine("В поле номер студенческого допускаются только цифры!");
+                sb.AppendLine("В поле номер студенческого допускаются только числа!");
+                isMistake = true;
             }
+
+            if(textBox7.Text == "")
+            {
+                textBox7.Text = "0";
+            }else if(!Regex.IsMatch(textBox7.Text, @"^[\p{N}]+$"))
+            {
+                sb.AppendLine("В поле количество задолженностей допускаются только числа!");
+                isMistake=true;
+            }
+
+            if(textBox8.Text=="")
+                textBox8.Text = "Примечания отсутствуют";
 
             if (isMistake == true)
                 MessageBox.Show(sb.ToString(), "Были обнаружены следующие ошибки:");
@@ -111,7 +139,51 @@ namespace Курсовая_работа__ООАиП
 
         private void button3_Click(object sender, EventArgs e)
         {
+            ShowStudentsForm showStudentsForm = new ShowStudentsForm();
+            showStudentsForm.ShowDialog();
+        }
 
+        private void dateTimePicker1_KeyDown(object sender, KeyEventArgs e)
+        {
+            e.SuppressKeyPress = true;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            ProcessingResultForm processingResultForm = new ProcessingResultForm();
+            processingResultForm.ShowDialog();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            ShowingUserListForm showingUserListForm = new ShowingUserListForm();
+            showingUserListForm.ShowDialog();
+        }
+
+      
+
+        private bool IsStudentNotExists(int id)
+        {
+            int tempNumberFromSQLTable=0;
+            SqlDataReader sqlDataReader;
+            using(SqlConnection connection=new SqlConnection(SQL_request.path))
+            {
+                connection.Open();
+                SqlCommand sqlCommand = new SqlCommand(SQL_request.listOfRequest[3], connection);
+                SqlParameter numParam = new SqlParameter("@studNum", id);
+                sqlCommand.Parameters.Add(numParam);
+                sqlDataReader = sqlCommand.ExecuteReader();
+                while(sqlDataReader.Read())
+                    tempNumberFromSQLTable=sqlDataReader.GetInt32(0);
+                if (tempNumberFromSQLTable != 0)
+                {
+                    MessageBox.Show("Студент с данным номер студенчесского билет уже существует!", "Ошибка!");
+                    return false;
+                }else
+                    return true;
+                    
+
+            }
         }
     }
 }

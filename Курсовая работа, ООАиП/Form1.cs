@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Text.RegularExpressions;
@@ -16,13 +9,11 @@ namespace Курсовая_работа__ООАиП
     
     public partial class Form1 : Form
     {
-        private SQL_request _sqlRequest = new SQL_request();
+        
 
         private bool _isNullValue=false;
 
-        private Regex _numberCheck = new Regex(@"[\d]");
-        private Regex _specialCheck = new Regex(@"[!@#$%^]");
-        private Regex _letterCheck = new Regex(@"[qwertyuiopasdfghjklzxcvbnm]");
+        
        
         public Form1()
         {
@@ -59,7 +50,7 @@ namespace Курсовая_работа__ООАиП
             return _isNullValue;               
         }
 
-        void SQLREquesForLoggingIn(string login, string password, int indexOfRequest)
+        public void SQLREquesForLoggingIn(string login, string password, int indexOfRequest)
         {
             string dbPassword="";
             
@@ -100,7 +91,7 @@ namespace Курсовая_работа__ООАиП
         {
             if (!CheckForNullValues(textBox3.Text, textBox4.Text) && PasswordCheck(textBox4.Text) && !CheckIfUserExists(textBox3.Text, textBox4.Text, 1))
             {
-                SQLRequestForRegistration(textBox3.Text, textBox4.Text);
+                SQLRequestForRegistration(textBox3.Text, textBox4.Text, "guest");
             }
             else
             {
@@ -110,20 +101,18 @@ namespace Курсовая_работа__ООАиП
 
         private bool PasswordCheck(string password)
         {
-            Match m1=_numberCheck.Match(password);
-            Match m2=_letterCheck.Match(password);
-            Match M3=_specialCheck.Match(password);
-            if (m1.Success && m2.Success && M3.Success)
+            
+            if (Regex.IsMatch(password, @"[\p{N}]") && Regex.IsMatch(password, @"[\p{L}]") && password.Length>=5 && Regex.IsMatch(password, @"[!@#$%^]"))
                 return true;
             else
             {
-                MessageBox.Show("Пароль не удовлетворяет требованиям: минимум 1 спец. символ, минимум 1 прописная буква, мимимум одня цифра!" , "Ошибка");
+                MessageBox.Show("Пароль не удовлетворяет требованиям: минимум 1 спец. символ, минимум 1 буква, мимимум одня цифра, минимум 5 знаков!" , "Ошибка");
                 return false;
             }
            
         }
 
-        private bool CheckIfUserExists(string login, string password, int indexOfRequest)
+        public bool CheckIfUserExists(string login, string password, int indexOfRequest)
         {
             string tempLoginForCheck = "";            
             SqlDataReader loginReader;           
@@ -155,7 +144,7 @@ namespace Курсовая_работа__ООАиП
             
         }
 
-        private void SQLRequestForRegistration(string login, string password)
+        public void SQLRequestForRegistration(string login, string password, string role)
         {
             int id = GetLastIDOFUser();
             
@@ -163,7 +152,7 @@ namespace Курсовая_работа__ООАиП
             using (SqlConnection connection = new SqlConnection(SQL_request.path))
             {
                 connection.Open();
-                SqlCommand command= new SqlCommand($"INSERT INTO [EBI-212].[dbo].[users](id, login, password, role)VALUES({id}, '{login}', '{password}', 'guest') ", connection);
+                SqlCommand command= new SqlCommand($"INSERT INTO [EBI-212].[dbo].[users](id, login, password, role)VALUES({id}, '{login}', '{password}', '{role}') ", connection);
                
 
                 
@@ -174,7 +163,7 @@ namespace Курсовая_работа__ООАиП
             }
         }
 
-        private int GetLastIDOFUser()
+        public int GetLastIDOFUser()
         {
             SqlDataReader idReader;
             int id=0;
@@ -190,6 +179,11 @@ namespace Курсовая_работа__ООАиП
                 id++;
             }
             return id;
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

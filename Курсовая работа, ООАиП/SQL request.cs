@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Data.SqlClient;
-using System.Text.RegularExpressions;
-
-
-namespace Курсовая_работа__ООАиП
+﻿namespace Курсовая_работа__ООАиП
 {
     
     public class SQL_request
@@ -18,10 +9,12 @@ namespace Курсовая_работа__ООАиП
             $"SELECT password, role FROM Users WHERE login = @login",
             $"SELECT login FROM [EBI-212].[dbo].[users] WHERE @userName=login",
             $"SELECT TOP 1 id FROM [EBI-212].[dbo].[users] ORDER  BY id DESC",
-            
+            $"SELECT studNum FROM student WHERE studNum=@studNum"
         };
-        public SqlParameter sqlParameter;
-        public SqlCommand sqlCommand=new SqlCommand();       
+
+
+        
+
     };
 
    
