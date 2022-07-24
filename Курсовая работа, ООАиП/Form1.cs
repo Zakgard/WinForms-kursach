@@ -5,27 +5,19 @@ using System.Text.RegularExpressions;
 
 
 namespace Курсовая_работа__ООАиП
-{
-    
+{    
     public partial class Form1 : Form
-    {
-        
-
-        private bool _isNullValue=false;
-
-        
-       
+    {        
+        private bool _isNullValue=false;             
         public Form1()
         {
             InitializeComponent();
         }
 
         private void button1_Click(object sender, EventArgs e)
-        {
-            
+        {            
             if(!CheckForNullValues(textBox1.Text, textBox1.Text))
             {
-
                 SQLREquesForLoggingIn(textBox1.Text, textBox2.Text, 0);
             }
             else
@@ -52,10 +44,8 @@ namespace Курсовая_работа__ООАиП
 
         public void SQLREquesForLoggingIn(string login, string password, int indexOfRequest)
         {
-            string dbPassword="";
-            
+            string dbPassword="";            
             string dbRole="";
-
             SqlDataReader reader;
 
             using (SqlConnection conn = new SqlConnection(SQL_request.path))
@@ -65,6 +55,7 @@ namespace Курсовая_работа__ООАиП
                 SqlParameter loginParameter= new SqlParameter("@login", login);
                 command.Parameters.Add(loginParameter);
                 reader = command.ExecuteReader();
+
                 while (reader.Read())
                 {
                     dbPassword = Convert.ToString(reader.GetValue(0));
@@ -100,8 +91,7 @@ namespace Курсовая_работа__ООАиП
         }
 
         private bool PasswordCheck(string password)
-        {
-            
+        {            
             if (Regex.IsMatch(password, @"[\p{N}]") && Regex.IsMatch(password, @"[\p{L}]") && password.Length>=5 && Regex.IsMatch(password, @"[!@#$%^]"))
                 return true;
             else
@@ -127,6 +117,7 @@ namespace Курсовая_работа__ООАиП
 
                 while(loginReader.Read())
                     tempLoginForCheck=loginReader.GetString(0);
+
                 if (tempLoginForCheck != "")
                 {
                     MessageBox.Show("Данный логин занят!");
@@ -135,13 +126,10 @@ namespace Курсовая_работа__ООАиП
                 }
                 else
                 {
-                    return false; 
                     conn.Close();
-                }
-                    
-                
-            }
-            
+                    return false;                     
+                }               
+            }            
         }
 
         public void SQLRequestForRegistration(string login, string password, string role)
@@ -154,12 +142,8 @@ namespace Курсовая_работа__ООАиП
                 connection.Open();
                 SqlCommand command= new SqlCommand($"INSERT INTO [EBI-212].[dbo].[users](id, login, password, role)VALUES({id}, '{login}', '{password}', '{role}') ", connection);
                
-
-                
                 if (command.ExecuteNonQuery().ToString() == Convert.ToString(1))
-                    MessageBox.Show("Пользователь успешно зарегестрирован!");
-            
-
+                    MessageBox.Show("Пользователь успешно зарегестрирован!");            
             }
         }
 
@@ -167,6 +151,7 @@ namespace Курсовая_работа__ООАиП
         {
             SqlDataReader idReader;
             int id=0;
+
             using(SqlConnection connection = new SqlConnection(SQL_request.path))
             {
                 connection.Open();
@@ -174,16 +159,13 @@ namespace Курсовая_работа__ООАиП
                 SqlParameter idParameter = new SqlParameter("@id", id);
                 command1.Parameters.Add(idParameter);
                 idReader = command1.ExecuteReader();
+
                 while(idReader.Read())
                     id=idReader.GetInt32(0);
+
                 id++;
             }
             return id;
-        }
-
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }

@@ -14,8 +14,7 @@ namespace Курсовая_работа__ООАиП
             this.Name = $"Пользователь: {login}, его роль: {role}";
             if (role == "guest")
             {
-                button1.Enabled = false;               
-                button2.Enabled = false;
+                button1.Enabled = false;                               
                 button4.Enabled = false;
             }
             if (role == "normal")
@@ -32,10 +31,8 @@ namespace Курсовая_работа__ООАиП
 
         private void button4_Click(object sender, EventArgs e)
         {
-            if (!CheckForNulls() && IsStudentNotExists(Convert.ToInt32(textBox6.Text)))
-                AddNewStudent(textBox1.Text, textBox2.Text, textBox3.Text, dateTimePicker1.Value.Day, dateTimePicker1.Value.Month,dateTimePicker1.Value.Year , comboBox1.Text, comboBox2.Text, Convert.ToInt32(textBox6.Text), Convert.ToInt32(textBox7.Text), textBox8.Text);
-          
-
+            if (IsInputwithoutNulls() && IsStudentNotExists(Convert.ToInt32(textBox6.Text)))
+                AddNewStudent(textBox1.Text, textBox2.Text, textBox3.Text, dateTimePicker1.Value.Day, dateTimePicker1.Value.Month,dateTimePicker1.Value.Year , comboBox1.Text, comboBox2.Text, Convert.ToInt32(textBox6.Text), Convert.ToInt32(textBox7.Text), textBox8.Text);         
         }
 
         public static void AddNewStudent(string firstName, string secondName, string thirdName, int dayOfBirth, int monthOfBirth, int yearOfBirth, string sex, string payMethod, int studNUm, int debtsAmount, string other)
@@ -54,13 +51,13 @@ namespace Курсовая_работа__ООАиП
 
         }
 
-        private bool CheckForNulls()
+        private bool IsInputwithoutNulls()
         {            
             StringBuilder sb= new StringBuilder("", 50);
-            bool isMistake=false;
+            bool isInputwithoutNulls=true;
             if (textBox1.Text == "")
             {
-                isMistake = true;
+                isInputwithoutNulls = false;
                 sb.AppendLine("Вы не ввели фамилию студента!");
             }else if (!Regex.IsMatch(textBox1.Text, @"^[\p{L}]+$"))
             {
@@ -69,7 +66,7 @@ namespace Курсовая_работа__ООАиП
                 
             if (textBox2.Text == "")
             {
-                isMistake = true;
+                isInputwithoutNulls = false;
                 sb.AppendLine("Вы не ввели имя студента!");
             }
             else if (!Regex.IsMatch(textBox2.Text, @"^[\p{L}]+$"))
@@ -79,7 +76,7 @@ namespace Курсовая_работа__ООАиП
 
             if (textBox3.Text == "")
             {
-                isMistake = true;
+                isInputwithoutNulls = false;
                 sb.AppendLine("Вы не ввели отчество студента!");
             }
             else if (!Regex.IsMatch(textBox3.Text, @"^[\p{L}]+$"))
@@ -89,34 +86,34 @@ namespace Курсовая_работа__ООАиП
 
             if (dateTimePicker1.Text=="")
             {
-                isMistake = true;
+                isInputwithoutNulls = false;
                 sb.AppendLine("Вы не выбрали дату рождения студента!");
             }
             
 
             if (comboBox1.Text == "")
             {
-                isMistake = true;
+                isInputwithoutNulls = false;
                 sb.AppendLine("Вы не выбрали пол студента!");
             }
             
 
             if (comboBox2.Text == "")
             {
-                isMistake = true;
+                isInputwithoutNulls = false;
                 sb.AppendLine("Вы не выбрали основу обучения!");
             }
 
             
             if (textBox6.Text == "")
             {
-                isMistake = true;
+                isInputwithoutNulls = false;
                 sb.AppendLine("Вы не ввели номер студенческого!");
             }
             else if (!Regex.IsMatch(textBox6.Text, @"^[\p{N}]+$"))
             {
                 sb.AppendLine("В поле номер студенческого допускаются только числа!");
-                isMistake = true;
+                isInputwithoutNulls = false;
             }
 
             if(textBox7.Text == "")
@@ -125,15 +122,15 @@ namespace Курсовая_работа__ООАиП
             }else if(!Regex.IsMatch(textBox7.Text, @"^[\p{N}]+$"))
             {
                 sb.AppendLine("В поле количество задолженностей допускаются только числа!");
-                isMistake=true;
+                isInputwithoutNulls=false;
             }
 
             if(textBox8.Text=="")
                 textBox8.Text = "Примечания отсутствуют";
 
-            if (isMistake == true)
+            if (isInputwithoutNulls == false)
                 MessageBox.Show(sb.ToString(), "Были обнаружены следующие ошибки:");
-            return isMistake;
+            return isInputwithoutNulls;
 
         }
 
@@ -147,13 +144,7 @@ namespace Курсовая_работа__ООАиП
         {
             e.SuppressKeyPress = true;
         }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            ProcessingResultForm processingResultForm = new ProcessingResultForm();
-            processingResultForm.ShowDialog();
-        }
-
+       
         private void button1_Click(object sender, EventArgs e)
         {
             ShowingUserListForm showingUserListForm = new ShowingUserListForm();

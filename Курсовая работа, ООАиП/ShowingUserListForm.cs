@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Data;
 using System.Data.SqlClient;
 using System.Text.RegularExpressions;
 
@@ -15,9 +8,9 @@ namespace Курсовая_работа__ООАиП
 {
     public partial class ShowingUserListForm : Form
     {
-        private SqlConnection sqlConnection = null;
-        private SqlDataAdapter sqlDataAdapter = null;
-        private DataTable dataTable = null;
+        private SqlConnection _sqlConnection = null;
+        private SqlDataAdapter _sqlDataAdapter = null;
+        private DataTable _dataTable = null;
 
         private bool _isNullValue;
 
@@ -29,17 +22,17 @@ namespace Курсовая_работа__ООАиП
 
         private void ShowingUserListForm_Load(object sender, EventArgs e)
         {
-            sqlConnection = new SqlConnection(SQL_request.path);
+            _sqlConnection = new SqlConnection(SQL_request.path);
 
-            sqlConnection.Open();
+            _sqlConnection.Open();
 
-            sqlDataAdapter = new SqlDataAdapter("SELECT * FROM Users", sqlConnection);
+            _sqlDataAdapter = new SqlDataAdapter("SELECT * FROM Users", _sqlConnection);
 
-            dataTable = new DataTable();
+            _dataTable = new DataTable();
 
-            sqlDataAdapter.Fill(dataTable);
+            _sqlDataAdapter.Fill(_dataTable);
 
-            dataGridView1.DataSource = dataTable;
+            dataGridView1.DataSource = _dataTable;
 
             comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
         }
